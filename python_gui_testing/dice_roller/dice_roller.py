@@ -22,9 +22,10 @@ dice_images = []
 for url in dice_urls:
     try:
         response = requests.get(url)
-        response.raise_for_status()  # Raise an exception if the response status code indicates an error
+        response.raise_for_status()
         image = Image.open(BytesIO(response.content))
-        dice_images.append(ImageTk.PhotoImage(image))
+        resized_image = image.resize((50, 50))  # Resize the image to width 100, maintaining aspect ratio
+        dice_images.append(ImageTk.PhotoImage(resized_image))
     except (requests.exceptions.HTTPError, Image.UnidentifiedImageError) as e:
         print(f"Error loading image from URL: {url}. Error: {e}")
 
@@ -75,9 +76,9 @@ dice_type_4_button.pack(side=tk.LEFT, padx=5)
 
 def roll_and_display_dice(num_dice, dice_type):
     if dice_type == "6-sided":
-        dice_results = roll_dice(num_dice)
-    else:
-        dice_results = roll_dice(num_dice, num_sides=4)
+        dice_results = roll_dice(num_dice, dice_type="6-sided")  # Pass the 'dice_type' argument
+    elif dice_type == "4-sided":
+        dice_results = roll_dice(num_dice, dice_type="4-sided")  # Pass the 'dice_type' argument
     result_label.config(text=f"Results: {dice_results}")
 
     # Display dice images
@@ -91,3 +92,6 @@ def roll_and_display_dice(num_dice, dice_type):
 
 # Start the tkinter event loop
 window.mainloop()
+
+
+#Notes: Currently the app runs, and expresses the values, but it only displays the first face.
