@@ -48,10 +48,6 @@ roll_button.pack()
 result_label = tk.Label(window, text="Results:")
 result_label.pack()
 
-# Create a label for displaying the dice images
-dice_image_label = tk.Label(window)
-dice_image_label.pack()
-
 # Create a label for the dice type
 dice_type_label = tk.Label(window, text="Dice Type:")
 dice_type_label.pack()
@@ -74,21 +70,79 @@ dice_type_6_button.pack(side=tk.LEFT, padx=5)
 dice_type_4_button = tk.Button(dice_type_buttons_frame, text="4-sided", command=lambda: select_dice_type("4-sided"))
 dice_type_4_button.pack(side=tk.LEFT, padx=5)
 
+# Define the number of rows and columns for the grid layout
+num_rows = 6
+num_columns = 6
+
+# Create a list to store the Label widgets
+dice_labels = []
+
 def roll_and_display_dice(num_dice, dice_type):
+    # Clear previously displayed dice images
+    for dice_label in dice_labels:
+        dice_label.grid_forget()
+
+    dice_labels.clear()
+
     if dice_type == "6-sided":
-        dice_results = roll_dice(num_dice, dice_type="6-sided")  # Pass the 'dice_type' argument
+        dice_results = roll_dice(num_dice)
     elif dice_type == "4-sided":
         dice_results = roll_dice(num_dice, dice_type="4-sided")  # Pass the 'dice_type' argument
+
     result_label.config(text=f"Results: {dice_results}")
 
     # Display dice images
-    dice_images_to_display = []
+    dice_labels_to_display = []
     for result in dice_results:
-        dice_images_to_display.append(dice_images[result - 1])
+        dice_image = dice_images[result - 1]
+        resized_image = dice_image.resize((50, 50), Image.ANTIALIAS)
+        dice_photo = ImageTk.PhotoImage(resized_image)
+        dice_label = tk.Label(window, image=dice_photo)
+        dice_label.grid(row=row, column=column, padx=5, pady=5)
+        dice_labels_to_display.append(dice_label)
 
-    # Update the image label
-    if dice_images_to_display:
-        dice_image_label.config(image=dice_images_to_display[0])  # Display the first image
+    # Update the image labels
+    for i, dice_label in enumerate(dice_labels_to_display):
+        row = i // num_columns  # Calculate the row index
+        column = i % num_columns  # Calculate the column index
+        dice_label.grid(row=row, column=column, padx=5, pady=5)
+
+    # Store the new labels in the dice_labels list
+    dice_labels.extend(dice_labels_to_display)
+
+
+# def roll_and_display_dice(num_dice, dice_type):
+#     # Clear previously displayed dice images
+#     for dice_label in dice_labels:
+#         dice_label.grid_forget()
+
+#     dice_labels.clear()
+
+#     if dice_type == "6-sided":
+#         dice_results = roll_dice(num_dice)
+#     elif dice_type == "4-sided":
+#         dice_results = roll_dice(num_dice, dice_type="4-sided")  # Pass the 'dice_type' argument
+
+#     result_label.config(text=f"Results: {dice_results}")
+
+#     # Display dice images
+#     dice_labels_to_display = []
+#     for result in dice_results:
+#         dice_image = dice_images[result - 1].resize((50, 50), Image.ANTIALIAS)
+#         dice_labels_to_display.append(ImageTk.PhotoImage(dice_image))
+
+#     # Update the image labels
+#     for i, image in enumerate(dice_labels_to_display):
+#         row = i // num_columns  # Calculate the row index
+#         column = i % num_columns  # Calculate the column index
+
+#         # Create a new Label widget for the dice face
+#         dice_label = tk.Label(window, image=image)
+#         dice_label.grid(row=row, column=column, padx=5, pady=5)
+#         dice_labels_to_display.append(dice_label)
+
+#     # Store the new labels in the dice_labels list
+#     dice_labels.extend(dice_labels_to_display)
 
 # Start the tkinter event loop
 window.mainloop()
