@@ -5,3 +5,5 @@ import random
 def six_side():
     roll = random.randint(1,6)
     print(roll)
+
+six_side()
