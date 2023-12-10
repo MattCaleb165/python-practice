@@ -1,5 +1,4 @@
 import tkinter as tk
-import random
 
 stop_word = "quit"  # Specify the stop word
 user_input = None  # Global variable to store user input
@@ -8,10 +7,10 @@ is_running = False  # Global variable to control the game loop
 
 def game_loop():
     global is_running
+    process_input()
 
-    while is_running:
-        window.wait_variable(user_input)
-        process_input()
+    if is_running:
+        window.after(100, game_loop)  # Check for input every 100 milliseconds
 
 def stop_game():
     global is_running
@@ -22,8 +21,6 @@ def stop_game():
 def process_input():
     global is_running, user_input
 
-    # Implement command processing logic here
-
     # Example: Handle "quit" command
     if user_input.get().lower() == stop_word.lower():
         stop_game()
@@ -32,7 +29,8 @@ def process_input():
         pass
 
 def start_game():
-    global is_running
+    global is_running, user_input
+    user_input = tk.StringVar()  # Initialize user_input as a StringVar
     is_running = True
     game_loop()
 
@@ -48,7 +46,7 @@ text_output = tk.Text(window, width=40, height=10)
 text_output.pack()
 
 # Create an Entry widget for user input
-input_text = tk.Entry(window)
+input_text = tk.Entry(window)  # Remove textvariable=user_input
 input_text.pack()
 
 def process_enter_key(event):

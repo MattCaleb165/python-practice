@@ -32,7 +32,7 @@ def question1():
 def question2():
     bdayMonth = typingInput("What month were you born? ")
     clearScreen()
-    if bdayMonth.casefold() == "january":
+    if bdayMonth.casefold() == ("january"):
         typingPrint("Alright, alright, that was super easy. Don't get a big head about yourself. Let's try another.\n")
         time.sleep(2)
         clearScreen()
@@ -43,7 +43,7 @@ def question2():
 def question3():
     oldHouse = typingInput("What was the name of the last house you stayed in while single? ")
     clearScreen()
-    if oldHouse.casefold() == "waterlicker" or "the waterlicker" or "the waterlicker house" or "the waterlick house":
+    if oldHouse.casefold() == ("waterlicker" or "the waterlicker" or "the waterlicker house" or "the waterlick house"):
         typingPrint("That's right! But let's try something more difficult.\n")
         time.sleep(2)
         clearScreen()
